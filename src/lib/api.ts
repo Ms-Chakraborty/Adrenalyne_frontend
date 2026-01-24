@@ -129,6 +129,30 @@ export const getEvent = async (
   return responseBody as EventDetails;
 };
 
+export const updateEvent = async (
+  accessToken: string,
+  id: string,
+  request: UpdateEventRequest,
+): Promise<void> => {
+  const response = await fetch(`${BASE_URL}/api/v1/events/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    const responseBody = await readOptionalJson(response);
+    if (responseBody && isErrorResponse(responseBody)) {
+      throw new Error(responseBody.error);
+    } else {
+      console.error(JSON.stringify(responseBody));
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
 export const deleteEvent = async (
   accessToken: string,
   id: string,
