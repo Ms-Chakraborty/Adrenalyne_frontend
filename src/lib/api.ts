@@ -39,12 +39,15 @@ async function readOptionalJson(response: Response): Promise<any | null> {
     return null;
   }
 }
+// 1. Add this at the very top of the file (outside the functions)
+const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 export const createEvent = async (
   accessToken: string,
   request: CreateEventRequest,
 ): Promise<void> => {
-  const response = await fetch("/api/v1/events", {
+  // 2. Change the URL to use the BASE_URL
+  const response = await fetch(`${BASE_URL}/api/v1/events`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -65,31 +68,6 @@ export const createEvent = async (
   }
 };
 
-export const updateEvent = async (
-  accessToken: string,
-  id: string,
-  request: UpdateEventRequest,
-): Promise<void> => {
-  const response = await fetch(`/api/v1/events/${id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(request),
-  });
-
-  const responseBody = await readOptionalJson(response);
-
-  if (!response.ok) {
-    if (isErrorResponse(responseBody)) {
-      throw new Error(responseBody.error);
-    } else {
-      console.error(JSON.stringify(responseBody));
-      throw new Error("An unknown error occurred");
-    }
-  }
-};
 
 export const listEvents = async (
   accessToken: string,
