@@ -109,9 +109,11 @@ const oidcConfig = {
   client_id: "CInIdVrqKdKEWn8yeaelhL1IuotXy28M",
   redirect_uri: window.location.origin,
     onSigninCallback: () => {
-    // This clears the messy login tokens from the URL bar after successful login
+    // This removes the codes from the URL and resets the path to the root "/"
+    // Use window.location.href to FORCE a clean redirect after login
     window.history.replaceState({}, document.title, window.location.pathname);
-  },
+    window.location.href = window.location.origin + "/dashboard"; // Auto-jump to dashboard after login
+},
 
 };
 

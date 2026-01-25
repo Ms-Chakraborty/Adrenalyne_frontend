@@ -21,7 +21,7 @@ const AttendeeLandingPage: React.FC = () => {
     SpringBootPagination<PublishedEventSummary> | undefined
   >();
   const [error, setError] = useState<string | undefined>();
-  const [query, setQuery] = useState<string | undefined>();
+  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     if (query && query.length > 0) {
@@ -128,14 +128,20 @@ const AttendeeLandingPage: React.FC = () => {
       </div>
 
       {/* Published Event Cards */}
-      <div className="grid grid-cols-2 gap-4 px-4 md:grid-cols-4">
-        {publishedEvents?.content?.map((publishedEvent) => (
-          <PublishedEventCard
-            publishedEvent={publishedEvent}
-            key={publishedEvent.id}
-          />
-        ))}
-      </div>
+<div className="grid grid-cols-2 gap-4 px-4 md:grid-cols-4">
+  {publishedEvents?.content ? (
+    publishedEvents.content.map((publishedEvent) => (
+      <PublishedEventCard
+        publishedEvent={publishedEvent}
+        key={publishedEvent.id}
+      />
+    ))
+  ) : (
+    <p className="text-gray-400 col-span-full text-center py-10">
+      No events found. Visit the dashboard to create one!
+    </p>
+  )}
+</div>
 
       {publishedEvents && (
         <div className="w-full flex justify-center py-8">
