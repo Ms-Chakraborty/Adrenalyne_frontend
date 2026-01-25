@@ -115,11 +115,15 @@ const oidcConfig = {
   },
   
   onSigninCallback: () => {
-    const savedPath = localStorage.getItem("redirectPath") || "/dashboard";
-    localStorage.removeItem("redirectPath");
-    window.history.replaceState({}, document.title, window.location.origin);
-    window.location.href = savedPath;
-  },
+  // 1. Completely clear the URL search parameters (?code=... &state=...)
+  // 2. This forces the browser to re-load the app with a clean URL
+  // which makes react-oidc-context realize "Hey, I'm logged in!"
+  const savedPath = localStorage.getItem("redirectPath") || "/dashboard";
+  localStorage.removeItem("redirectPath");
+  
+  // Use .replace to avoid making the user click 'back' 100 times
+  window.location.replace(window.location.origin + savedPath);
+},
 };
 
 
