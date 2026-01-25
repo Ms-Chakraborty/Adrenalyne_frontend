@@ -2,15 +2,12 @@ import { SpringBootPagination } from "@/domain/domain";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface SimplePaginationProps<T> {
+interface SimplePaginationProps<T = unknown> {
   pagination: SpringBootPagination<T>;
   onPageChange: (page: number) => void;
 }
 
-export function SimplePagination<T>({
-  pagination,
-  onPageChange,
-}: React.FC<SimplePaginationProps<T>>) {
+export function SimplePagination<T>({ pagination, onPageChange }: SimplePaginationProps<T>) {
   const currentPage = pagination.number;
   const totalPages = pagination.totalPages;
 

@@ -145,10 +145,7 @@ const AttendeeLandingPage: React.FC = () => {
 
       {publishedEvents && (
         <div className="w-full flex justify-center py-8">
-          <SimplePagination
-            pagination={publishedEvents}
-            onPageChange={setPage}
-          />{" "}
+          <SimplePagination pagination={publishedEvents} onPageChange={setPage} />{" "}
         </div>
       )}
     </div>
