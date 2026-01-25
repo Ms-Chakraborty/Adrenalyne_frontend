@@ -108,15 +108,16 @@ const oidcConfig = {
   authority: "https://dev-iiquwoop2n6x06rm.us.auth0.com",
   client_id: "CInIdVrqKdKEWn8yeaelhL1IuotXy28M",
   redirect_uri: window.location.origin,
+  
+  // ADD THIS BLOCK:
+  extraQueryParams: {
+    audience: "https://adreanalyne-api", // MUST match the Identifier in Auth0 exactly
+  },
+  
   onSigninCallback: () => {
-    // 1. Check if we saved a path (like /dashboard) before being sent to login
     const savedPath = localStorage.getItem("redirectPath") || "/dashboard";
     localStorage.removeItem("redirectPath");
-
-    // 2. Clean the URL (removes ?code=...)
     window.history.replaceState({}, document.title, window.location.origin);
-
-    // 3. Jump to the destination
     window.location.href = savedPath;
   },
 };
