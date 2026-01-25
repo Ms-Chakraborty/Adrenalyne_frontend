@@ -108,14 +108,19 @@ const oidcConfig = {
   authority: "https://dev-iiquwoop2n6x06rm.us.auth0.com",
   client_id: "CInIdVrqKdKEWn8yeaelhL1IuotXy28M",
   redirect_uri: window.location.origin,
-    onSigninCallback: () => {
-    // This removes the codes from the URL and resets the path to the root "/"
-    // Use window.location.href to FORCE a clean redirect after login
-    window.history.replaceState({}, document.title, window.location.pathname);
-    window.location.href = window.location.origin + "/dashboard"; // Auto-jump to dashboard after login
-},
+  onSigninCallback: () => {
+    // 1. Check if we saved a path (like /dashboard) before being sent to login
+    const savedPath = localStorage.getItem("redirectPath") || "/dashboard";
+    localStorage.removeItem("redirectPath");
 
+    // 2. Clean the URL (removes ?code=...)
+    window.history.replaceState({}, document.title, window.location.origin);
+
+    // 3. Jump to the destination
+    window.location.href = savedPath;
+  },
 };
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
