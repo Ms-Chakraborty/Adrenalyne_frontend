@@ -108,15 +108,19 @@ const oidcConfig = {
   authority: "https://dev-iiquwoop2n6x06rm.us.auth0.com",
   client_id: "CInIdVrqKdKEWn8yeaelhL1IuotXy28M",
   redirect_uri: window.location.origin,
-  
-  // Make sure this matches the "Identifier" on your Auth0 API settings page
   extraQueryParams: {
-    audience: "https://adreanalyne-api", 
+    audience: "https://adreanalyne-api", // Match the API Identifier exactly
   },
-  
-  onSigninCallback: () => {
-    // This cleans the URL and keeps you on the home page so you can see the 'Dashboard' button
-    window.history.replaceState({}, document.title, window.location.origin);
+  // Update this section specifically:
+  onSigninCallback: (_user: any): void => {
+    // 1. Force clear the URL immediately
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.origin + window.location.pathname
+    );
+    // 2. Redirect to dashboard to trigger a re-render of the state
+    window.location.href = "/dashboard";
   },
 };
 
