@@ -105,22 +105,15 @@ const router = createBrowserRouter([
 ]);
 
 const oidcConfig = {
-  authority: "https://dev-iiquwoop2n6x06rm.us.auth0.com",
-  client_id: "CInIdVrqKdKEWn8yeaelhL1IuotXy28M",
+  // Use the exact link you just provided
+  authority: "https://usw2.auth.ac/auth/realms/adreanalyne-tickets",
+  client_id: "adreanalyne-client", 
   redirect_uri: window.location.origin,
-  extraQueryParams: {
-    audience: "https://adreanalyne-api", // Match the API Identifier exactly
-  },
-  // Update this section specifically:
-  onSigninCallback: (_user: any): void => {
-    // 1. Force clear the URL immediately
-    window.history.replaceState(
-      {},
-      document.title,
-      window.location.origin + window.location.pathname
-    );
-    // 2. Redirect to dashboard to trigger a re-render of the state
-    window.location.href = "/dashboard";
+  onSigninCallback: () => {
+      // Cleans the URL bar
+      window.history.replaceState({}, document.title, window.location.origin);
+      // After login, automatically send user to the dashboard
+      window.location.href = "/dashboard";
   },
 };
 
