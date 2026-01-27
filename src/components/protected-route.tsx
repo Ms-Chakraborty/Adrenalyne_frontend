@@ -6,23 +6,20 @@ interface ProtectedRouteProperties {
   children: ReactNode;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProperties> = ({ children }) => {
-  const { isLoading, isAuthenticated } = useAuth();
-  const location = useLocation();
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, isLoading, user } = useAuth();
+
+  console.log("Protected Route - Loading:", isLoading, "Auth:", isAuthenticated);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <div>Verifying your identity...</div>;
   }
 
   if (!isAuthenticated) {
-    localStorage.setItem(
-      "redirectPath",
-      globalThis.location.pathname + globalThis.location.search,
-    );
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

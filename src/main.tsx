@@ -109,22 +109,17 @@ const oidcConfig = {
   client_id: "CInIdVrqKdKEWn8yeaelhL1IuotXy28M",
   redirect_uri: window.location.origin,
   
-  // ADD THIS BLOCK:
+  // Make sure this matches the "Identifier" on your Auth0 API settings page
   extraQueryParams: {
-    audience: "https://adreanalyne-api", // MUST match the Identifier in Auth0 exactly
+    audience: "https://adreanalyne-api", 
   },
   
   onSigninCallback: () => {
-  // 1. Completely clear the URL search parameters (?code=... &state=...)
-  // 2. This forces the browser to re-load the app with a clean URL
-  // which makes react-oidc-context realize "Hey, I'm logged in!"
-  const savedPath = localStorage.getItem("redirectPath") || "/dashboard";
-  localStorage.removeItem("redirectPath");
-  
-  // Use .replace to avoid making the user click 'back' 100 times
-  window.location.replace(window.location.origin + savedPath);
-},
+    // This cleans the URL and keeps you on the home page so you can see the 'Dashboard' button
+    window.history.replaceState({}, document.title, window.location.origin);
+  },
 };
+
 
 
 createRoot(document.getElementById("root")!).render(
