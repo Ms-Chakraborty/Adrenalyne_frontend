@@ -25,10 +25,3 @@ It allows users to browse events, view event details, and interact with the back
 - ESLint & Prettier
 
 ---
-
-## ⚙️ Installation
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Ms-Chakraborty/Adreanalyne_frontend.git
