@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
-import { jwtDecode } from "jwt-decode";
+import { useAuth } from "@/lib/dev-auth";
 
 interface UseRolesReturn {
   isLoading: boolean;
@@ -37,8 +36,7 @@ export const useRoles = (): UseRolesReturn => {
     }
 
     try {
-      const payload = jwtDecode<JwtPayload>(user?.access_token);
-      const allRoles = payload.realm_access?.roles || [];
+      const allRoles = user.profile.roles || [];
       const filteredRoles = allRoles.filter((role) => role.startsWith("ROLE_"));
       setRoles(filteredRoles);
       setIsOrganizer(filteredRoles.includes("ROLE_ORGANIZER"));

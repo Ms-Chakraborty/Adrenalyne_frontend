@@ -9,7 +9,7 @@ import {
 import { getPublishedEvent } from "@/lib/api";
 import { AlertCircle, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
+import { useAuth } from "@/lib/dev-auth";
 import { Link, useNavigate, useParams } from "react-router";
 
 const PublishedEventsPage: React.FC = () => {

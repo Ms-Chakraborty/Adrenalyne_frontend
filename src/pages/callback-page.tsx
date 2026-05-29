@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
+import { useAuth } from "@/lib/dev-auth";
 import { useNavigate } from "react-router";
 
 const CallbackPage: React.FC = () => {

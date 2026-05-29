@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import AttendeeLandingPage from "./pages/attendee-landing-page.tsx";
-import { AuthProvider } from "react-oidc-context";
+import { AuthProvider } from "@/lib/dev-auth";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import OrganizersLandingPage from "./pages/organizers-landing-page.tsx";
 import DashboardManageEventPage from "./pages/dashboard-manage-event-page.tsx";
@@ -104,24 +104,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-const oidcConfig = {
-  // Use the exact link you just provided
-  authority: "https://usw2.auth.ac/auth/realms/adreanalyne-tickets",
-  client_id: "adreanalyne-client", 
-  redirect_uri: window.location.origin,
-  onSigninCallback: () => {
-      // Cleans the URL bar
-      window.history.replaceState({}, document.title, window.location.origin);
-      // After login, automatically send user to the dashboard
-      window.location.href = "/dashboard";
-  },
-};
-
-
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider {...oidcConfig}>
+    <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>,

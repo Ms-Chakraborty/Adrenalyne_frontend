@@ -1,4 +1,4 @@
-import { useAuth } from "react-oidc-context";
+import { useAuth } from "@/lib/dev-auth";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router";
 import { Input } from "@/components/ui/input";

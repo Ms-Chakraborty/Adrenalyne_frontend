@@ -3,7 +3,7 @@ import { getTicket, getTicketQr } from "@/lib/api";
 import { format } from "date-fns";
 import { Calendar, DollarSign, MapPin, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
+import { useAuth } from "@/lib/dev-auth";
 import { useParams } from "react-router";
 
 const DashboardViewTicketPage: React.FC = () => {

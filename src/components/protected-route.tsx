@@ -1,13 +1,8 @@
-import { ReactNode } from "react";
-import { useAuth } from "react-oidc-context";
-import { Navigate, useLocation } from "react-router";
-
-interface ProtectedRouteProperties {
-  children: ReactNode;
-}
+import { useAuth } from "@/lib/dev-auth";
+import { Navigate } from "react-router";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
   console.log("Protected Route - Loading:", isLoading, "Auth:", isAuthenticated);
 

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useAuth } from "react-oidc-context";
+import { useAuth } from "@/lib/dev-auth";
 import { useNavigate } from "react-router";
 
 const OrganizersLandingPage: React.FC = () => {

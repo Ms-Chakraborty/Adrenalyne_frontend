@@ -13,7 +13,7 @@ import {
   UpdateEventRequest,
 } from "@/domain/domain";
 
-async function readOptionalJson(response: Response): Promise<any | null> {
+async function readOptionalJson(response: Response): Promise<unknown | null> {
   const text = await response.text();
   if (!text) {
     console.error("[api] Empty response body", {
@@ -268,15 +268,31 @@ export const purchaseTicket = async (
   eventId: string,
   ticketTypeId: string,
 ): Promise<void> => {
-  const response = await fetch(
-    `${BASE_URL}/api/v1/events/${eventId}/ticket-types/${ticketTypeId}/tickets`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
+  // In dev mode we use session cookies for authentication (dev access tokens are prefixed with "dev-")
+  const isDevToken = typeof accessToken === "string" && accessToken.startsWith("dev-");
+
+  // When using the dev token, call backend directly so the browser will include the session cookie
+  const apiBase = isDevToken ? "http://localhost:8080" : BASE_URL || "";
+
+  const options: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
+  };
+
+  if (isDevToken) {
+    (options as any).credentials = "include";
+  } else if (accessToken) {
+    options.headers = {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${accessToken}`,
+    };
+  }
+
+  const response = await fetch(
+    `${apiBase}/api/v1/events/${eventId}/ticket-types/${ticketTypeId}/tickets`,
+    options,
   );
 
   if (!response.ok) {
@@ -372,14 +388,29 @@ export const validateTicket = async (
   accessToken: string,
   request: TicketValidationRequest,
 ): Promise<TicketValidationResponse> => {
-  const response = await fetch(`${BASE_URL}/api/v1/ticket-validations`, {
+  // Support dev session-based auth: when access tokens are prefixed with "dev-",
+  // call backend directly and send cookies so Spring Session can authenticate.
+  const isDevToken = typeof accessToken === "string" && accessToken.startsWith("dev-");
+  const apiBase = isDevToken ? "http://localhost:8080" : BASE_URL || "";
+
+  const options: RequestInit = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
-  });
+  };
+
+  if (isDevToken) {
+    (options as any).credentials = "include";
+  } else if (accessToken) {
+    options.headers = {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${accessToken}`,
+    };
+  }
+
+  const response = await fetch(`${apiBase}/api/v1/ticket-validations`, options);
 
   const responseBody = await readOptionalJson(response);
 
@@ -396,5 +427,5 @@ export const validateTicket = async (
     throw new Error("Empty response body from server");
   }
 
-  return responseBody as Promise<TicketValidationResponse>;
+  return responseBody as TicketValidationResponse;
 };
